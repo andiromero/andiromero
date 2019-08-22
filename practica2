@@ -12,7 +12,6 @@ plot(x,y)
 
 
 #recta ajustada y=75.2+0.2093x
-
 z <- aa+bb*70
 a <- 70
 q <- aa+bb*40
@@ -23,6 +22,6 @@ mod1 <- lm(y~x)
 rr <- predict(mod1)
 qplot(x,y,
       geom=c("point"),
-method="lm") + geom_line(aes(y=rr), lwd=1.2, color=4) + geom_point(aes(z,a), color=5) + geom_point(aes(q,b), color=6) + geom_point(aes(w,c), color=2)
+method="lm") + geom_line(aes(y=rr), lwd=1.2, color=4) + geom_point(aes(a,z), color="pink") + geom_point(aes(b,q), color="purple") + geom_point(aes(c,w), color=8)
 
 names(rr)
