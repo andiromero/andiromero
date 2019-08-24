@@ -1,0 +1,31 @@
+base1 <- read.csv("C:\\Users\\ALUMNO-C30\\Documents\\TR_PERSONA15.CSV")
+library(foreign)
+ls(base1)
+class (base1$SEXO)
+x <- c(3,4,5)
+y <- c(7,4,2)
+base2 <- data.frame(x,y)
+class(base2$y)
+
+table(base1$SEXO)
+head(base1)
+View(base1)
+
+install.packages("questionr")
+require(questionr)
+sum(wtd.table(base1$SEXO, weights = base1$FACTOR))
+table(base1$MUN)
+table(base1$EDAD)
+base1$gpoedad <- ifelse(base1$EDAD <= 14,1,
+                        ifelse (base1$EDAD >=15 & base1$EDAD <= 29,2,
+                        ifelse (base1$EDAD >=99,3,4)))
+
+table(base1$gpoedad)
+base1$EDAD <- as.numeric(base1$EDAD)
+class(base1$EDAD)
+
+aculco <- subset(base1, base1$NOM_MUN == "Aculco")
+metepec <- subset(base1, base1$NOM_MUN == "Metepec")
+valledebravo <- subset(base1, base1$NOM_MUN == "Valle de Bravo")
+valle_aculco <- subset(base1, base1$NOM_MUN == "Aculco" | base1$NOM_MUN == "Valle de Bravo")
+met_tlat<- subset(base1, base1$NOM_MUN == "Metepec" | base1$NOM_MUN == "Tlatlaya")
