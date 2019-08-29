@@ -1,0 +1,33 @@
+x <- c(125.3,98.2,201.4,147.3,145.9,124.7,112.2,120.2,161.2,178.9,159.5,145.8,75.1,151.4,144.2,125,198.8,132.5,159.6,110.7)
+y <- c(77.9,76.8,81.5,79.8,78.2,78.3,77.5,77,80.1,80.2,79.9,79,76.7,78.2,79.5,78.1,81.5,77,79,78.6)
+
+sxx <- sum((x-mean(x))^2)
+sxy <-  sum((x-mean(x))*(y-mean(y)))
+bb <- sxy/sxx
+bb
+aa <- mean(y) - bb*mean(x)
+aa
+
+yy <- aa+bb*x
+yy
+
+rr <- y-yy
+rr
+
+
+z <- data.frame(x,y,yy,rr)
+View(z)
+
+
+require(ggplot2)
+mod1 <- lm(y~x)
+zz <- predict(mod1)
+qplot(x,y,
+      geom=c("point"),
+      method="lm") + geom_line(aes(y=zz), lwd=1.2, color=4)
+
+
+
+sse <- sum((y-yy)^2)
+s2= sse/18
+s <- sqrt(s)    
