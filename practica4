@@ -31,3 +31,8 @@ qplot(x,y,
 sse <- sum((y-yy)^2)
 s2= sse/18
 s <- sqrt(s)    
+sst <- sum(y^2)-((sum(y))^2)/20
+
+
+r2 <- 1-(sse/sst)
+summary(mod1)
