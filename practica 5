@@ -1,0 +1,51 @@
+x <- c(50,50,80,80,110,110,140,140,170,170)
+y <- c(17052,14063,26264,19600,21952,26362,26362,26752,31654,32928)
+plot(x,y)
+
+sxx <- sum((x-mean(x))^2)
+sxy <-  sum((x-mean(x))*(y-mean(y)))
+bb <- sxy/sxx ##b1
+bb
+aa <- mean(y) - bb*mean(x) ##b0
+aa
+
+yy <- aa+bb*x
+yy
+
+rr <- y-yy
+rr
+
+
+z <- data.frame(x,y,yy,rr)
+View(z)
+
+install.packages("ggplot2")
+require(ggplot2)
+mod1 <- lm(y~x)
+zz <- predict(mod1)
+qplot(x,y,
+      geom=c("point"),
+      method="lm") + geom_line(aes(y=zz), lwd=1.2, color=4)
+
+
+
+sse <- sum((y-yy)^2)
+s2= sse/8
+s <- sqrt(s2)            
+sst <- sum(y^2)-((sum(y))^2)/10
+
+
+r2 <- 1-(sse/sst)
+summary(mod1)
+
+sbb <- s/sqrt(sxx)
+sbb
+
+ic <- bb+2.3060*(sbb)
+ic
+
+ic2 <- bb-2.3060*(sbb)
+ic2
+
+
+qt(p=.95+ .05/2, df=8, lower.tail =TRUE)
