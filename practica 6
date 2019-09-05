@@ -27,3 +27,64 @@ qplot(x,y,
   geom_text(x = 46, y = 49, aes(label= paste ("y", "=", aa, "+", bb, "*", "b0")))
 
 
+
+
+
+
+##################################################################
+
+
+x <- c(635,644,711,708,836,820,810,870,856,923,878,937,948)
+y <- c(100,93,88,84,77,75,74,63,57,55,47,43,38)
+
+mod1 <- lm(y~x)
+summary(mod1)
+
+require(ggplot2)
+mod1 <- lm(y~x)
+zz <- predict(mod1)  ## Predict = Recta ajustada  x^ ó y^
+zz
+aa <- round(mod1$coefficients[1],2)
+bb <- round(mod1$coefficients[1],2)
+mod1$coefficients
+
+qplot(x,y,
+      main= "Gráfica Regresión", ylab= "Velocidad 1",
+      xlab= "Velocidad 2",
+      geom=c("point"),
+      method="lm") + geom_line(aes(y=zz), lwd=1.2, color=4) +
+  geom_text(x = 46, y = 49, aes(label= paste ("y", "=", aa, "+", bb, "*", "b0")))
+
+
+
+sxx <- sum((x-mean(x))^2)
+sxy <-  sum((x-mean(x))*(y-mean(y)))
+bb <- sxy/sxx ##b1
+bb
+aa <- mean(y) - bb*mean(x) ##b0
+aa
+
+
+rr <- y-zz
+rr
+
+sse <- sum((y-zz)^2)
+s2= sse/11
+s <- sqrt(s2)            
+sst <- sum(y^2)-((sum(y))^2)/13
+
+
+r2 <- 1-(sse/sst)
+
+
+sbb <- s/sqrt(sxx)
+sbb
+
+ic <- bb+2.200985*(sbb)
+ic
+
+ic2 <- bb-2.200985*(sbb)
+ic2
+
+
+qt(p=.95+ .05/2, df=11, lower.tail =TRUE)
