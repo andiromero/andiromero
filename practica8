@@ -57,7 +57,7 @@ qplot(t,p,
 ########################
 
 mod <- lm(p~t)
-x1 <- data.frame(t=77.5)  ## x*       ##median(t=77.5)
+x1 <- data.frame(t=77.5)  ## x*       ##data.frame(median(t))
 median (t)
 confint(mod, 't', level=0.95)    ### i.c b1
 predict(mod,x1, interval="confidence")     #### i.c y^      (fit=cuanto vale x* en la recta ajustada)
