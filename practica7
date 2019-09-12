@@ -9,9 +9,9 @@ zz
 
 sxx <- sum((x-mean(x))^2)
 sxy <-  sum((x-mean(x))*(y-mean(y)))
-bb <- sxy/sxx ##b1
+bb <- sxy/sxx ##b1     Estimate    t
 bb
-aa <- mean(y) - bb*mean(x) ##b0
+aa <- mean(y) - bb*mean(x) ##b0   Estimate Intercept
 aa
 
 
@@ -20,18 +20,27 @@ yy
 
 
 
-s <- 2.866
+s <- 2.866     ## Residual Standard Error
 sbb <- s/sqrt(sxx)  #sy
 sbb
 
 
-sy <- s*(sqrt((1/18)+((45-mean(x))^2))/sxx)    #pvalue
+sy <- s*(sqrt((1/18)+((45-mean(x))^2))/sxx)    #pvalue     n=18     x*=45
 
-ic <- bb+2.119905*(sy)
+
+ic <- yy+2.010635*(sy)
 ic
 
-ic2 <- bb-2.119905*(sy)
+ic2 <- yy-2.010635*(sy)
 ic2
+
+
+
+icb <- bb+2.119905*(sbb)
+icb
+
+ic2b <- bb-2.119905*(sbb)
+ic2b
 
 
 qt(p=.95+ .05/2, df=16, lower.tail =TRUE)
