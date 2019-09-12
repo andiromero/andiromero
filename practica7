@@ -1,0 +1,37 @@
+x <- c(8,15,16.5,20,20,27.5,30,30,35,38,40,45,50,50,55,55,59,65)
+y <- c(22.8,27.2,23.7,17.1,21.5,18.6,16.1,23.4,13.4,19.5,12.4,13.2,11.3,10.3,14.1,9.7,12,6.8)
+
+mod1 <- lm(y~x)   ##R squared 
+summary(mod1)
+
+zz <- predict(mod1)
+zz
+
+sxx <- sum((x-mean(x))^2)
+sxy <-  sum((x-mean(x))*(y-mean(y)))
+bb <- sxy/sxx ##b1
+bb
+aa <- mean(y) - bb*mean(x) ##b0
+aa
+
+
+yy <- aa+bb*45  #y gorrito
+yy
+
+
+
+s <- 2.866
+sbb <- s/sqrt(sxx)  #sy
+sbb
+
+
+sy <- s*(sqrt((1/18)+((45-mean(x))^2))/sxx)    #pvalue
+
+ic <- bb+2.119905*(sy)
+ic
+
+ic2 <- bb-2.119905*(sy)
+ic2
+
+
+qt(p=.95+ .05/2, df=16, lower.tail =TRUE)
