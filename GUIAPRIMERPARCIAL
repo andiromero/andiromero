@@ -238,3 +238,6 @@ median (t)
 confint(mod, 't', level=0.95)    ### i.c b1
 predict(mod,x1, interval="confidence")     #### i.c y^      (fit=cuanto vale x* en la recta ajustada)
 summary(mod)
+
+
+## La relación indica que la presión sanguínea incrementa en promedio 1.3 unidades por cada año de edad que incrementa
