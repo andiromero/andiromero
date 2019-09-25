@@ -1,0 +1,163 @@
+################### GUÍA PRIMER PARCIAL ANÁLISIS DE REGRESIÓN ###################
+# 1. El análisis de regresión es la parte de la estadística que estudia la relación 
+# entre dos o más variables no determinísticas.
+# 
+# MODELO DE REGRESIÓN LINEAL
+# Existen parámetros B0, B1, S^2, de tal forma que con cualquier valor fijo de la
+# variable x, la variable dependiente y es una v.a y está relacionada con x mediante:
+#                    y= B0 + B1 + E
+## (Queremos que E = Error Aleatorio, sea 0)
+## La estimación pasada (recta) deberá ser el mejor ajuste de los datos observados.
+
+
+# Sea x* un valor particular de x:
+# -> My.x* = El valor esperado de y cuando x=x*
+# S^2y.x* = La varianza de y cuando x=x*
+
+# My.x* = E(B0 + B1x + E) =  B0 + B1 +E(t) = B0 + B1x       
+# S^2y.x* = V(B0 + B1x + E) = V(B0 + B1x) + V(E) = S^2
+
+## Cuando S es es pequeña, un punto (x,y) normalmente quedará bastante cerca de la 
+## recta de regresión.
+
+
+# Ejercicio 1.
+# y = 65 - 1.2x = My.x,   S=8
+
+#Si x = 20 
+
+My20 <- 65-1.2*(20)  #Media con la recta
+My20
+
+# Ahora, si queremos concocer la probabilidad cuando y>50 con x=20, planteamos 
+# P(y>50 cuando x=20)
+
+z <- (50-41)/8    #Valor y>50 - el resultado de la media
+z
+p <- 1-.8708  # 1 - el valor de z en la tabla de la normal
+p
+
+# Y  P(y>50 cuando x=25)
+My25 <- 65-1.2*(25)
+My25
+z <- (50-35)/8
+z
+p <- 1-.9693
+p
+
+
+# La recta de mejor ajuste deberá ser la que tenga la suma más pequeña posible de 
+# las desviaciones al cuadrado
+
+# Ejercicio 2.
+x <- c(132,129,120,113.2,105,92,84,83.2,88.4,59,80,81.5,71,69.2)
+y <- c(46,48,51,52.1,54,52,59,58.7,61.8,64,61.4,54.6,58.8,58)
+
+sxx <- sum((x-mean(x))^2)
+sxy <-  sum((x-mean(x))*(y-mean(y)))
+
+b1 <- sxy/sxx
+b1
+b0 <- mean(y) - b1*mean(x) 
+b0
+
+plot(x,y)
+
+
+#recta ajustada y=75.2+0.2093x
+z <- b0+b1*70     # valor y1
+a <- 70           # valor x1
+q <- b0+b1*40
+b <- 40
+w <- b0+b1*55
+c <- 55
+mod1 <- lm(y~x)            # generar modelo lineal
+rr <- predict(mod1)        # saca todos los valores de la recta de regresión
+
+install.packages("ggplot2")
+require(ggplot2)
+qplot(x,y,
+      geom=c("point"),
+      method="lm") + geom_line(aes(y=rr), lwd=1.2, color=4) + geom_point(aes(a,z), color="pink") + geom_point(aes(b,q), color="purple") + geom_point(aes(c,w), color=8)
+
+# Ejercicio 3. Bases de datos
+
+base1 <- read.csv("C:\\Users\\ALUMNO-E8.SALAE-8\\Desktop\\TR_PERSONA01.CSV")
+library(foreign)   #Para leer .csv
+ls(base1)      # Muestra las variables de la base de datos     
+class (base1$SEXO) # Muestra el tipo de dato de la variable (si son enteros o de 
+                   # caracteres)
+x <- c(3,4,5)
+y <- c(7,4,2)
+base2 <- data.frame(x,y) 
+class(base2$y)
+
+table(base1$SEXO)   #Muestra la suma de todos los valores de una variable
+head(base1)
+View(base1)      #Muestra la base completa
+
+install.packages("questionr")   #Paquete para usar wtd.table
+require(questionr)
+sum(wtd.table(base1$SEXO, weights = base1$FACTOR))   # El FACTOR pasa la muestra de una variable a población
+table(base1$MUN)
+table(base1$EDAD)     #Nos muestra cuantos datos hay para cada edad
+base1$gpoedad <- ifelse(base1$EDAD <= 14,1,
+                        ifelse (base1$EDAD >=15 & base1$EDAD <= 29,2,    #Nos muestra una tabla con grupos condicionados
+                                ifelse (base1$EDAD >=99,3,4)))
+
+table(base1$gpoedad)
+base1$EDAD <- as.numeric(base1$EDAD)
+class(base1$EDAD)
+
+aculco <- subset(base1, base1$NOM_MUN == "Aculco")    #El subset selecciona solo un grupo de una variable
+metepec <- subset(base1, base1$NOM_MUN == "Metepec")
+valledebravo <- subset(base1, base1$NOM_MUN == "Valle de Bravo")
+valle_aculco <- subset(base1, base1$NOM_MUN == "Aculco" | base1$NOM_MUN == "Valle de Bravo")
+met_tlat<- subset(base1, base1$NOM_MUN == "Metepec" | base1$NOM_MUN == "Tlatlaya")
+
+
+
+# ESTIMACIÓN DE SIGMA Y SIGMA CUADRADA (S Y S^2, DESVIACIÓN Y VARIANZA) 
+# El parámetro S^2 (sigma) determina la cantidad de variabilidad inherente en el MRL. 
+# Un valor grande de S^2 nos indica que los puntos están bastantes dispersos en torno 
+# a la recta de regresión y viceversa.
+
+# Recta estimada: y^1= B^0 + B^1*x1
+# Los residuos son las diferencias y1-y^1, ..., yn-y^n
+# Si los residuos son pequeños hay una relación lineal fuerte entre x y y, y viceversa.
+
+# DESVIACIÓN ESTÁNDAR DE LA MEDIA
+# S^2 = Σ(xi - x ¯)^2 / (n-1)          ** x ¯ = media de x
+
+# La suma de cuadrados residuales se denota por SSE
+# SSE = Σ(yi - y^i)^2 = Σ (yi - (B^0 + B^1*x1))^2
+# Y la estimación de sigma cuadrada es
+# S^2 = SSE/n-2 = Σ(yi - y^i)^2 / (n-2)
+
+x <- c(125.3,98.2,201.4,147.3,145.9,124.7,112.2,120.2,161.2,178.9,159.5,145.8,75.1,151.4,144.2,125,198.8,132.5,159.6,110.7)
+y <- c(77.9,76.8,81.5,79.8,78.2,78.3,77.5,77,80.1,80.2,79.9,79,76.7,78.2,79.5,78.1,81.5,77,79,78.6)
+
+sxx <- sum((x-mean(x))^2)
+sxy <-  sum((x-mean(x))*(y-mean(y)))
+bb <- sxy/sxx
+bb
+aa <- mean(y) - bb*mean(x)
+aa
+
+yy <- aa+bb*x
+yy
+
+rr <- y-yy
+rr
+
+
+sse <- sum((rr)^2)   # Suma de cuadrados residuales
+s2= sse/18   #Varianza
+s <- sqrt(s)    #Desviación estandar
+
+
+sst <- sum(y^2)-((sum(y))^2)/20     #Suma de cuadrados total
+
+
+r2 <- 1-(sse/sst)  
+summary(mod1)
