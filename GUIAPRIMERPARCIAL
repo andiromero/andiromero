@@ -152,12 +152,25 @@ rr
 
 
 sse <- sum((rr)^2)   # Suma de cuadrados residuales
+                     ## Se interpreta como una medida de cuanta variación de y permanece 
+                     ## sin ser explicada por el modelo, es decir, cuanta variación no 
+                     ## puede ser atribuida a una relación lineal
+
+# SSE < SST SIEMPRE
+
 s2= sse/18   #Varianza
-s <- sqrt(s)    #Desviación estandar
+s <- sqrt(s2)    #Desviación estandar
 
 
-sst <- sum(y^2)-((sum(y))^2)/20     #Suma de cuadrados total
+## SUMA DE CUADRADOS TOTAL (SST)
+# Genera una medida cuantitativa de la cantidad de variación total en los valores y observados
+# Recta horizontal
+sst <- sum(y^2)-((sum(y))^2)/20  #Suma de cuadrados total
 
-
+## COEFICIENTE DE DETERMINACIÓN
+# Proporción de Y observada que puede explicarse mediante un modelo de regresión lineal simple
+# Mientras más cercano a 1, mejor modelo
 r2 <- 1-(sse/sst)  
-summary(mod1)
+
+
+## INFERENCIAS SOBRE EL 
