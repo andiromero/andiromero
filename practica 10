@@ -1,0 +1,21 @@
+x <- c(220,220,220,220,370,370,370,370,440,440,440,440,680,680,680,680,860,860,860,860)
+y <- c(24,22,19.1,15.5,26.3,24.6,23.1,21.2,25.2,24,21.7,19.2,17,14.9,13,11.8,12.2,11.2,6.6,2.8)
+
+## a <- lm(y~I(x+x^2))
+
+plot(x,y)
+datos <- data.frame(x,y)
+mod1<- lm(y~poly(x,2,raw=T), data=datos)
+predi <- predict(mod1)
+predi
+summary(mod1)  ## Entre mayor R^2 mejor  modelo
+
+#Valores recta ajustada
+names(mod1)
+mod1$fitted.values
+
+
+require(ggplot2)
+ggplot()+geom_point(data=datos, aes(x=x,y=y), size=1)+
+  geom_line(aes(x=datos$x, y=predi), color="blue")+
+  xlab("X")+ ylab("Y")+ggtitle("Curva de Ajuste")
