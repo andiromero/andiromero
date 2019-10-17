@@ -7,3 +7,18 @@ y <- c(26.2,26.3,39.8,39.7,38.6,35.5,48.8,37.8,26.6,23.4,38.6,52.1,39.5,32.3,43,
 datos <- data.frame(x1,x2,x3,x4,y)
 mod1<- lm(y~x1+x2+x3+x4, data=datos)
 summary(mod1)  
+
+## Interpreta x3. Se estima que .1297gm es el cambio promedio en resistencia asociado con un aumento de grado 1 de temperatura 
+## cuando las otras tres variables independientes se mantienen fijos
+
+
+yy <- -37.47667+0.21167*35+0.49833*75+0.12967*200+0.258333*20
+yy
+names(mod1)
+mod1$coefficients ## Nos da todas las B
+mod1$fitted.values ## Valores de y^, ajustados, ecuación ajustada con mínimos cuadrados
+
+plot(x4,y)
+
+## F-statistic plantea H0=B1=B2=B3=B4=0 y la rechaza 
+## El error es qué tanto varia la recta respecto a la recta ajustada
