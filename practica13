@@ -9,4 +9,8 @@ mod1<- lm(y~x1+x2+x3+x4, data=datos)
 summary(mod1)  
 
 
-f <- (0.714/4)/((1-0.714)/(30-(5))) ##
+f <- (0.714/4)/((1-0.714)/(30-(5))) ##Revisando el p-value del estadístico f podemos decir que la H0 debe ser rechazada por
+                                    ##lo que se concluye que hay una relacion lineal útil entre y y al menos una de las cuatro v.i.
+                                    ##es importante señalar que esto no significa que las 4 v.i sean utiles
+
+## Las Pr(>|t|) de cada B nos indica si tienen relación con y si p < .05
