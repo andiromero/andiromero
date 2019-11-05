@@ -45,3 +45,17 @@ f
 qf(0.05, 6, 7, lower.tail=F)
 
 ## Como qf es menos a f, rechazamos H0:Ba=...=B9=0 y aceptamos Ha
+
+## Nos quedamos con el completo por la confirmación anterior
+## Vamos a comparar si las variables indep. con altos valores de p-value en este caso las hip. son las siguientes: 
+## H0:B7=...=0
+## Ha:Bi al menos una dif de cero
+
+mod3 <- lm(y~x1+x2+x3+x4+x5+x6, data=datos)
+summary(mod3)
+anova(mod3)
+f2 <- ((0.5053-0.2152)/(3))/((0.2152)/(7))
+f2
+qf(0.05, 3, 7, lower.tail=F)
+qf(0.01, 3, 7, lower.tail=F)
+qf(0.1, 3, 7, lower.tail=F)
