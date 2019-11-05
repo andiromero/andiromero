@@ -14,10 +14,21 @@ x9 <- x2*x3
 datos <- data.frame(x1,x2,x3,x4,x5,x6,x7,x8,x9,y)
 mod1<- lm(y~x1+x2+x3+x4+x5+x6+x7+x8+x9, data=datos)
 summary(mod1) 
+
+##H0:B1=B2=...=B9=0
+##Ha:Bi al menos una dif. de cero
+##No se rechaza el modelo completo con base en Ra^2 porque es cercano a 1
+##Sí se rechaza H0 por el p-value<.05
+
 coefficients(mod1)
 
 yy <- -131.61437500+1.68750000*x1+0.77687500*x2+0.79787500*x3-0.02700000*x4-0.00275625*x5-0.00203750*x6-0.00087500*x7+0.00060000*x8-0.00061875*x9
 yy
+
+##¿Está justificada la inclusión de las var. indep. X4,...,X9?
+##H0:Ba=...=B9=0
+##Ha:Bi al menos una dif. de cero
+
 
 mod2 <- lm(y~x1+x2+x3, data=datos)
 summary(mod2)
@@ -33,4 +44,4 @@ f
 ## Para valores Fisher
 qf(0.05, 6, 7, lower.tail=F)
 
-## Como qf es menos a f, rechazamos H0 y aceptamos Ha
+## Como qf es menos a f, rechazamos H0:Ba=...=B9=0 y aceptamos Ha
