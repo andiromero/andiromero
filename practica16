@@ -1,0 +1,32 @@
+y <- c(3.11,3.26,3.89,10.25,3.11,13.48,3.94,3.53,3.36,6.49,2.72,12.48,2.82,5.19,8.04)
+x1 <- c(2.04,2.04,3.06,3.06,4.08,4.08,2.06,2.06,3.08,3.08,4.11,4.11,2.01,3.02,4.03)
+x2 <- c(3.55,6.07,3.55,6.07,3.55,6.16,3.62,6.16,3.62,5.89,3.62,5.89,6.18,6.18,6.18)
+
+x3 <-x1*x2 
+  
+datos <- data.frame(x1,x2,x3,y)
+mod1<- lm(y~x1+x2+x3, data=datos)
+summary(mod1) 
+
+## H0: b3=0
+## Ha: alguna dif. de cero
+## Se rechaza H0 porque p-value<.05
+
+mod2 <- lm(y~x1+x2, data=datos)
+summary(mod2)
+## SSE = anova(mod1)  Residuals
+
+anova(mod1)
+anova(mod2)
+
+## Comparación de modelos reducido con completo
+f <- ((79.054-32.627)/(1))/((32.627)/(11))
+f
+
+## Para valores Fisher
+qf(0.05, 1, 11, lower.tail=F)
+## Como qf es menos a f, rechazamos H0:B0=...=B4=0 y aceptamos Ha
+##Se mantiene x3
+
+predict(object=mod1,newdata = data.frame(x1=3,x2=6,x3=18), interval="confidence",level= .95) #### Y^
+predict(object=mod1,newdata = data.frame(x1=3,x2=6,x3=18), interval="predict",level= .95)
