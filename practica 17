@@ -1,0 +1,132 @@
+y <- c(3.11,3.26,3.89,10.25,3.11,13.48,3.94,3.53,3.36,6.49,2.72,12.48,2.82,5.19,8.04)
+x1 <- c(2.04,2.04,3.06,3.06,4.08,4.08,2.06,2.06,3.08,3.08,4.11,4.11,2.01,3.02,4.03)
+x2 <- c(3.55,6.07,3.55,6.07,3.55,6.16,3.62,6.16,3.62,5.89,3.62,5.89,6.18,6.18,6.18)
+
+x3 <- x1*x2
+
+datos <- data.frame(y,x1,x2,x3)
+
+modelo <- lm(y~x1+x2+x3)
+summary(modelo)
+modelo$coefficients
+
+# Al correr el modelo completo, no lo rechazamos con base en su R^2 ajustada, porque tiene un valor de 77%.
+# Rechazamos H0: B1 = B2 = B3 = 0 porque el valor de p-value es menor a 0.05 y concluimos con:
+# Ha: Al menos una Bi es diferente de 0; i=1,2,3 al 95% rechazamos la hipótesis nula y consideramos el modelo completo.
+# Aporta información para nuesra variable independiente.
+
+modelo2 <- lm(y~x1+x2)
+summary(modelo2)
+modelo2$coefficients
+
+anova(modelo)
+anova(modelo2)
+
+SSEl <- 78.727
+SSEk <- 32.633
+n <- 15
+k <- 3
+l <- 2
+
+# Para justificar la inclusión de la variable independiente X3 se hace un modelo sin esa variable y
+# comparamos el valor de las f para saber cuál es mejor.
+
+# Las hipótesis que se plantean son:
+# H0: B4 = B5 = ... = B9 = 0
+# Ha: Al menos una Bi es diferente de 0; i = 4,5,...,9
+
+f1 <- ((SSEl-SSEk)/(k-l))/(SSEk/(n-(k+1)))
+f1
+
+f2 <- qf(0.05,1,11,lower.tail = FALSE)
+f2
+
+# Si el valor de f1 que calculammos es mayor a f2 (que es el de las tablas) rechazamos H0
+# Por ello decimos que el modelo completo es mejor que el reducido
+
+yest <- ((modelo$coefficients[1])) + ((modelo$coefficients[2])*3) + ((modelo$coefficients[3])*6) + ((modelo$coefficients[4])*18)
+yest
+summary(yest)
+
+# La desviación estándar de la yest es:
+sy <- 0.555
+
+# La probanilidad a tomar a un 95% es:
+t <- qt(p=0.95+(0.05/2),df=11,lower.tail = TRUE)
+t
+
+# Intervalo de confianza cuando X1 = 3 y X2 = 6
+min <- yest - t * sy
+min
+max <- yest + t * sy
+max
+
+predict(object = modelo, newdata = data.frame(x1=c(3),x2=c(6),x3=c(18)),interval = "confidence", level = 0.95)
+predict(object = modelo, newdata = data.frame(x1=c(3),x2=c(6),x3=c(18)),interval = "prediction", level = 0.95)
+
+
+#____________________________________________
+# PRUEBA DE NORMALIDAD  SHAPIRO WILKS
+# H0: La variable presenta una distribución normal
+# Ha: La variable presenta una distribución no normal
+
+shapiro.test(x1)
+shapiro.test(x2)
+shapiro.test(x3)
+
+# Si p-value es mayor a 0.05 (alpha) no se rechaza la hipótesis nula
+# Por lo tanto X3 se distribuye normalmente, pero x1 y x2 no se distribuyen
+
+#____________________________________________
+# PRUEBA DE LINEALIDAD
+
+# Esta condición se puede validar bien mediante diagramas de dispersión entre la variable dependiente y cada uno de los predictores (como se ha hecho en el análisis preliminar)
+# o con diagramas de dispersión entre cada uno de los predictores y los residuos del modelo. Si la relación es lineal, los residuos deben de distribuirse aleatoriamente en torno
+# a 0 con una variabilidad constante a lo largo del eje X. Esta última opción suele ser más indicada ya que permite identificar posibles datos atípicos.
+
+summary(modelo)
+install.packages("gridExtra")
+library(ggplot2)
+library(gridExtra)
+
+plot1 <- ggplot(data = datos, aes(x1, modelo$residuals)) +
+  geom_point() + geom_smooth(color = "firebrick") + geom_hline(yintercept = 0) +
+  theme_bw()
+plot1
+plot2 <- ggplot(data = datos, aes(x2, modelo$residuals)) +
+  geom_point() + geom_smooth(color = "firebrick") + geom_hline(yintercept = 0) +
+  theme_bw()
+plot2
+plot3 <- ggplot(data = datos, aes(x3, modelo$residuals)) +
+  geom_point() + geom_smooth(color = "firebrick") + geom_hline(yintercept = 0) +
+  theme_bw()
+plot3
+grid.arrange(plot1, plot2, plot3)
+
+#____________________________________________
+# PRUEBA DE MULTICOLINEALIDAD
+
+install.packages("car")
+library(car)
+pairs(datos)
+cor(datos)
+vif(modelo)
+
+#____________________________________________
+# PRUEBA DE HOMOCEDASTICIDAD
+install.packages("lmtest")
+library(lmtest)
+bptest(modelo)
+
+# Como p-value es mayor a 0.05 no hay evidencia de falta de homocedasticidad,, por lo tanto rechazamos la hipótesis nula y hay
+# prescencia de heterocedasticidad.
+
+
+#____________________________________________
+# PRUEBA DE INDEPENDENCIA DE LOS ERRORES
+durbinWatsonTest(modelo,simulate = TRUE, reps = 1000)
+
+# No se rechaza la prescencia de correlación
+# Se rechaza H0 ya que el p-value es menor a 0.05
+# H0: Errores iguales a 0
+# H0: Errores diferentes a 0
